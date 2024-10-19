@@ -1,10 +1,8 @@
 import "./globals.css";
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
 import Providers from "@/lib/providers";
 
-
-const inter = Inter({ subsets: ["latin"] });
+import { GeistSans } from "geist/font/sans";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -17,8 +15,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-        <Providers><body className={inter.className}>{children}</body></Providers>
+    <html lang="en" className={GeistSans.className}>
+      <body>
+        <Providers>{children}</Providers>
+      </body>
     </html>
   );
 }
