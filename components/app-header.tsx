@@ -16,9 +16,9 @@ import { useDynamicContext } from "@/lib/dynamic";
 import { useAccount } from "wagmi";
 
 const navItems = [
-  { title: "Featured", href: "/featured" },
-  { title: "Free", href: "/free" },
-  { title: "Categories", href: "/categories" },
+  { title: "Featured", href: "#" },
+  { title: "Free", href: "#" },
+  { title: "Categories", href: "#" },
 ];
 
 export function AppHeader() {
