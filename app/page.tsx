@@ -1,3 +1,4 @@
+import { AppHeader } from "@/components/app-header";
 import LandingPage from "@/components/landing-page";
 import getFileFromWalrusAction from "@/server/get-file-from-walrus-action";
 
@@ -9,9 +10,9 @@ export default async function Main() {
 
   // render the image
   return (
-    <div>
+    <>
+      <AppHeader />
       <LandingPage />
-      <img src={response.dataUrl} alt="Walrus File" />
-    </div>
+    </>
   );
 }

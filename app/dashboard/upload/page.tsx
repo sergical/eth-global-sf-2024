@@ -20,7 +20,9 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import uploadFileToWalrusAction from "@/server/upload-file-to-walrus-action";
-import { FileObject } from "@/lib/types";
+
+import { useAccount } from "wagmi";
+import { toast } from "sonner";
 
 const formSchema = z.object({
   file: z.instanceof(File).optional(),
@@ -29,6 +31,8 @@ const formSchema = z.object({
 });
 
 export default function UploadPage() {
+  const { address } = useAccount();
+  const [isLoading, setIsLoading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -64,34 +68,34 @@ export default function UploadPage() {
   };
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("Uploading:", values);
+    setIsLoading(true);
     if (!values.file) {
+      toast.error("No file selected");
+      setIsLoading(false);
       return;
     }
-    // Convert File object to a plain object
-    const fileObject: FileObject = {
-      name: values.file.name,
-      type: values.file.type,
-      size: values.file.size,
-      lastModified: values.file.lastModified,
-    };
+    if (!address) {
+      toast.error("No address found");
+      setIsLoading(false);
+      return;
+    }
 
-    // Read the file content as ArrayBuffer
-    const arrayBuffer = await values.file.arrayBuffer();
-
-    // Convert ArrayBuffer to Base64 string
-    const base64String = btoa(
-      new Uint8Array(arrayBuffer).reduce(
-        (data, byte) => data + String.fromCharCode(byte),
-        ""
-      )
-    );
-
-    // Add the file content to the plain object
-    fileObject.content = base64String;
-
-    const response = await uploadFileToWalrusAction(fileObject);
-    console.log("Response:", response);
+    const formData = new FormData();
+    formData.append("file", values.file);
+    formData.append("address", address);
+    try {
+      const response = await uploadFileToWalrusAction(formData);
+      if (response.success) {
+        toast.success("File uploaded successfully");
+      } else {
+        toast.error(response.error);
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error("An error occurred");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const formFile = form.watch("file");
@@ -173,8 +177,8 @@ export default function UploadPage() {
                 </FormItem>
               )}
             />
-            <Button type="submit" className="w-full">
-              Upload Content
+            <Button type="submit" className="w-full" disabled={isLoading}>
+              {isLoading ? "Uploading..." : "Upload Content"}
             </Button>
           </form>
         </Form>

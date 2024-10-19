@@ -1,3 +1,5 @@
+"use server";
+
 export default async function getFileFromWalrusAction(blobId: string) {
   const response = await fetch(
     `${process.env.NEXT_PRIVATE_WALRUS_AGGREGATOR}/v1/${blobId}`
