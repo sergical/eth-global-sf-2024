@@ -13,7 +13,8 @@ import {
 
 import { AccountSelector } from "./account-selector";
 
-import { Home } from "lucide-react";
+import { Home, Image, Upload } from "lucide-react";
+import Link from "next/link";
 
 // Menu items.
 const items = [
@@ -22,12 +23,26 @@ const items = [
     url: "/dashboard",
     icon: Home,
   },
+  {
+    title: "Media",
+    url: "/dashboard/media",
+    icon: Image,
+  },
+  {
+    title: "Upload",
+    url: "/dashboard/upload",
+    icon: Upload,
+  },
 ];
 
 export function AppSidebar() {
   return (
-    <Sidebar>
-      <SidebarHeader>The Logo</SidebarHeader>
+    <Sidebar collapsible="icon">
+      <SidebarHeader>
+        <SidebarMenuButton>
+          <Link href="/">Our Awesome App</Link>
+        </SidebarMenuButton>
+      </SidebarHeader>
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Application</SidebarGroupLabel>
@@ -36,10 +51,10 @@ export function AppSidebar() {
               {items.map((item) => (
                 <SidebarMenuItem key={item.title}>
                   <SidebarMenuButton asChild>
-                    <a href={item.url}>
+                    <Link href={item.url}>
                       <item.icon />
                       <span>{item.title}</span>
-                    </a>
+                    </Link>
                   </SidebarMenuButton>
                 </SidebarMenuItem>
               ))}

@@ -1,5 +1,6 @@
 "use client";
-
+import { OnchainKitProvider } from "@coinbase/onchainkit";
+import { mainnet } from "viem/chains";
 import { DynamicContextProvider } from "@dynamic-labs/sdk-react-core";
 import { EthereumWalletConnectors } from "@dynamic-labs/ethereum";
 import { WagmiProvider } from "wagmi";
@@ -21,7 +22,12 @@ export default function Providers({ children }: { children: React.ReactNode }) {
     >
       <WagmiProvider config={config}>
         <QueryClientProvider client={queryClient}>
-          <DynamicWagmiConnector>{children}</DynamicWagmiConnector>
+          <OnchainKitProvider
+            apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
+            chain={mainnet}
+          >
+            <DynamicWagmiConnector>{children}</DynamicWagmiConnector>
+          </OnchainKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
     </DynamicContextProvider>
