@@ -22,10 +22,8 @@ export function Photo({
   const [imgUrl, setImgUrl] = useState<string | null>(null);
 
   useEffect(() => {
-    console.log("Fetching image:", blobId);
     getFileFromWalrusAction(blobId).then((response) => {
       setLoaded(true);
-      console.log("Response:", response);
       setImgUrl(response.dataUrl);
     });
   }, [blobId]);

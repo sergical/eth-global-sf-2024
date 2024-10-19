@@ -35,7 +35,6 @@ export function UserMediaGallery() {
         console.error(error);
         setError(error.message);
       } else {
-        console.log("Supabase data:", data); // Debugging step
         setBlobs(data || []);
       }
     };
