@@ -11,6 +11,7 @@ import {
 } from "@coinbase/onchainkit/identity";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useEnsName } from "wagmi";
 
 export function Photo({
   blobId,
@@ -21,6 +22,10 @@ export function Photo({
 }) {
   const [loaded, setLoaded] = useState(false);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
+
+  const { data: ensName } = useEnsName({
+    address: walletAddress as `0x${string}`,
+  });
 
   useEffect(() => {
     getFileFromWalrusAction(blobId).then((response) => {
@@ -59,7 +64,7 @@ export function Photo({
           Image
         </h3>
         {walletAddress ? (
-          <Link href={`/user/${walletAddress}`}>
+          <Link href={`/user/${ensName ?? walletAddress}`}>
             <Identity
               address={walletAddress as `0x${string}`}
               schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
