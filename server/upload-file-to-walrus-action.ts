@@ -6,6 +6,10 @@ export default async function uploadFileToWalrusAction(formData: FormData) {
   const file = formData.get("file") as File;
 
   const address = formData.get("address") as string;
+  const ipId = formData.get("ipId") as string;
+  const nftMetadataBlobId = formData.get("nftMetadataBlobId") as string;
+  const ipMetadataBlobId = formData.get("ipMetadataBlobId") as string;
+  const licenseType = formData.get("licenseType") as string;
 
   if (!address) {
     return { success: false, error: "No address provided" };
@@ -42,6 +46,10 @@ export default async function uploadFileToWalrusAction(formData: FormData) {
   const { error } = await supabase.from("user_blobs").insert({
     user_id: address,
     blob_id: blob_id,
+    ip_id: ipId,
+    nft_metadata_blob_id: nftMetadataBlobId,
+    ip_metadata_blob_id: ipMetadataBlobId,
+    license_type: licenseType,
   });
 
   if (error) {

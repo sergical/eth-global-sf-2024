@@ -36,11 +36,14 @@ export function AccountSelector() {
             schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
             className="w-full p-0"
           >
-            <Avatar className="w-6 h-6" />
-            <Name>
+            <Avatar
+              className="w-6 h-6 bg-primary"
+              address={address as `0x${string}`}
+            />
+            <Name address={address as `0x${string}`}>
               <Badge />
             </Name>
-            <Address />
+            <Address address={address} />
           </Identity>
         </SidebarMenuButton>
       </DropdownMenuTrigger>

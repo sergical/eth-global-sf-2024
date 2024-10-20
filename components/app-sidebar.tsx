@@ -40,7 +40,7 @@ export function AppSidebar() {
     <Sidebar collapsible="icon">
       <SidebarHeader>
         <SidebarMenuButton>
-          <Link href="/">Our Awesome App</Link>
+          <Link href="/">PicFable</Link>
         </SidebarMenuButton>
       </SidebarHeader>
       <SidebarContent>
