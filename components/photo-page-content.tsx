@@ -12,13 +12,22 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useEnsName } from "wagmi";
 import { Button } from "@/components/ui/button";
+import { Badge as BadgeUI } from "@/components/ui/badge";
 
 export function PhotoPageContent({
   blobId,
   walletAddress,
+  title,
+  description,
+  ipId,
+  license,
 }: {
   blobId: string;
   walletAddress?: string;
+  title?: string;
+  description?: string;
+  ipId?: string;
+  license?: string;
 }) {
   const [loaded, setLoaded] = useState(false);
   const [imgUrl, setImgUrl] = useState<string | null>(null);
@@ -41,6 +50,23 @@ export function PhotoPageContent({
       </div>
     );
   }
+
+  const getLicenseDetails = (licenseType: string) => {
+    switch (licenseType) {
+      case "0":
+        return { label: "Non-Commercial Remix", variant: "secondary" as const };
+      case "1":
+        return { label: "Commercial Use", variant: "destructive" as const };
+      case "2":
+        return { label: "Commercial Remix", variant: "default" as const };
+      default:
+        return { label: "Unknown", variant: "outline" as const };
+    }
+  };
+
+  const licenseDetails = license ? getLicenseDetails(license) : null;
+
+  const canRemix = license === "0" || license === "2";
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -65,7 +91,16 @@ export function PhotoPageContent({
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <h1 className="text-3xl font-bold mb-4">Image Details</h1>
+            <div className="flex items-center mb-4">
+              <h1 className="text-3xl font-bold mr-2">
+                {title ?? "Image Details"}
+              </h1>
+              {licenseDetails && (
+                <BadgeUI variant={licenseDetails.variant}>
+                  {licenseDetails.label}
+                </BadgeUI>
+              )}
+            </div>
             {walletAddress ? (
               <Link href={`/user/${ensName ?? walletAddress}`}>
                 <Identity
@@ -89,13 +124,35 @@ export function PhotoPageContent({
               </p>
             )}
             <div className="flex space-x-4 mb-8">
-              <Button>Download</Button>
-              <Button>Tip</Button>
-              <Button>Remix</Button>
+              <Button asChild>
+                <Link
+                  href={`/api/image/${blobId}`}
+                  download
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  Download
+                </Link>
+              </Button>
+              {canRemix && (
+                <Button variant="outline" asChild>
+                  <Link href={`/remix/${ipId}`}>Remix</Link>
+                </Button>
+              )}
+              {ipId && (
+                <Button variant="ghost" asChild>
+                  <Link
+                    href={`https://explorer.story.foundation/ipa/${ipId}`}
+                    target="_blank"
+                  >
+                    View license details
+                  </Link>
+                </Button>
+              )}
             </div>
             <p className="text-gray-600">
-              Additional image details or description can go here. You can add
-              more content or components as needed.
+              {description ??
+                "Additional image details or description can go here. You can add more content or components as needed."}
             </p>
           </motion.div>
         </div>

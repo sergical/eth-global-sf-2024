@@ -11,11 +11,19 @@ export default async function PhotoPage({
   const { data } = await supabase
     .from("user_blobs")
     .select("*")
-    .eq("blob_id", blobId);
+    .eq("blob_id", blobId)
+    .single();
   return (
     <>
       <AppHeader />
-      <PhotoPageContent blobId={blobId} walletAddress={data?.[0].user_id} />
+      <PhotoPageContent
+        blobId={blobId}
+        walletAddress={data?.user_id ?? ""}
+        title={data?.title ?? ""}
+        description={data?.description ?? ""}
+        ipId={data?.ip_id ?? ""}
+        license={data?.license_type ?? ""}
+      />
     </>
   );
 }

@@ -39,7 +39,7 @@ export function AppSidebar() {
   return (
     <Sidebar collapsible="icon">
       <SidebarHeader>
-        <SidebarMenuButton>
+        <SidebarMenuButton asChild>
           <Link href="/">PicFable</Link>
         </SidebarMenuButton>
       </SidebarHeader>
