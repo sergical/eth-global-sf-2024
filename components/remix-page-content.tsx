@@ -5,9 +5,11 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import Image from "next/image";
+import { toast } from "sonner";
+import CryptoJS from "crypto-js";
 
 import { PIL_TYPE } from "@story-protocol/core-sdk";
-import { useEnsName } from "wagmi";
+import { useEnsName, useAccount } from "wagmi";
 import Link from "next/link";
 import {
   Avatar,
@@ -39,6 +41,9 @@ import {
 } from "@/components/ui/select";
 import { Database } from "@/lib/database.types";
 import getFileFromWalrusAction from "@/server/get-file-from-walrus-action";
+import uploadTextToWalrusAction from "@/server/upload-text-to-walrus-action";
+import uploadFileToWalrusAction from "@/server/upload-file-to-walrus-action";
+import { useStory } from "@/lib/storyProviderWrapper";
 
 const formSchema = z.object({
   title: z.string().min(1, "Title is required"),
@@ -58,6 +63,8 @@ export function RemixPageContent({
   const { data: ensName } = useEnsName({
     address: originalObject.user_id as `0x${string}`,
   });
+  const { address } = useAccount();
+  const { client } = useStory();
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -75,13 +82,98 @@ export function RemixPageContent({
   }, [originalObject.blob_id]);
 
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    console.log("handle submit");
-    console.log(values);
+    if (!client || !address) {
+      toast.error("Client or address not available");
+      return;
+    }
+
     setIsLoading(true);
-    setTimeout(() => {
+    try {
+      // Create and upload NFT metadata
+      const nftMetadata = {
+        name: values.title,
+        description: values.description,
+        image: `${process.env.NEXT_PUBLIC_APP_URL}/api/image/${originalObject.blob_id}`, // Use original image for now
+      };
+      const nftMetadataResponse = await uploadTextToWalrusAction(
+        JSON.stringify(nftMetadata)
+      );
+      if (!nftMetadataResponse.success)
+        throw new Error(nftMetadataResponse.error);
+      const nftMetadataUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/json/${nftMetadataResponse.blob_id}`;
+
+      // Create and upload IP metadata
+      const ipMetadata = client.ipAsset.generateIpMetadata({
+        title: values.title,
+        description: values.description,
+        attributes: [
+          { key: "License Type", value: values.licenseType.toString() },
+        ],
+      });
+      const ipMetadataResponse = await uploadTextToWalrusAction(
+        JSON.stringify(ipMetadata)
+      );
+      if (!ipMetadataResponse.success)
+        throw new Error(ipMetadataResponse.error);
+      const ipMetadataUrl = `${process.env.NEXT_PUBLIC_APP_URL}/api/json/${ipMetadataResponse.blob_id}`;
+
+      // Calculate hashes
+      const nftHash = CryptoJS.SHA256(JSON.stringify(nftMetadata)).toString(
+        CryptoJS.enc.Hex
+      );
+      const ipHash = CryptoJS.SHA256(JSON.stringify(ipMetadata)).toString(
+        CryptoJS.enc.Hex
+      );
+
+      // Mint and register derivative IP asset
+      const derivativeResponse =
+        await client.ipAsset.mintAndRegisterIpAndMakeDerivative({
+          nftContract: process.env
+            .NEXT_PUBLIC_NFT_CONTRACT_ADDRESS as `0x${string}`,
+          derivData: {
+            parentIpIds: [originalObject.ip_id as `0x${string}`],
+            licenseTermsIds: [Number(values.licenseType)],
+          },
+          ipMetadata: {
+            ipMetadataURI: ipMetadataUrl,
+            ipMetadataHash: `0x${ipHash}`,
+            nftMetadataURI: nftMetadataUrl,
+            nftMetadataHash: `0x${nftHash}`,
+          },
+          txOptions: { waitForTransaction: true },
+        });
+
+      // Upload file to Walrus
+      const fileFormData = new FormData();
+      fileFormData.append("file", values.file);
+      fileFormData.append("address", address);
+      fileFormData.append(
+        "ipId",
+        derivativeResponse.childIpId as `0x${string}`
+      );
+      fileFormData.append(
+        "nftMetadataBlobId",
+        nftMetadataResponse?.blob_id ?? ""
+      );
+      fileFormData.append(
+        "ipMetadataBlobId",
+        ipMetadataResponse?.blob_id ?? ""
+      );
+      fileFormData.append("licenseType", values.licenseType.toString());
+      fileFormData.append("title", values.title);
+      fileFormData.append("description", values.description);
+
+      const fileUploadResponse = await uploadFileToWalrusAction(fileFormData);
+      if (!fileUploadResponse.success)
+        throw new Error(fileUploadResponse.error);
+
+      toast.success("Remix created successfully!");
+    } catch (error) {
+      console.error("Error creating remix:", error);
+      toast.error("Failed to create remix");
+    } finally {
       setIsLoading(false);
-    }, 3000);
-    // Implement your submit logic here
+    }
   };
 
   return (

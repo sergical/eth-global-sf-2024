@@ -134,6 +134,7 @@ export function PhotoPageContent({
                   Download
                 </Link>
               </Button>
+
               {canRemix && (
                 <Button variant="outline" asChild>
                   <Link href={`/remix/${ipId}`}>Remix</Link>
