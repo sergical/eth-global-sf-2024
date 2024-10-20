@@ -18,21 +18,7 @@ export default function UsersHub() {
     const formData = new FormData(e.target as HTMLFormElement);
     const formDataJson = Object.fromEntries(formData.entries());
 
-    // 1. Mint license tokens
-    const response = await client.license.mintLicenseTokens({
-      licenseTermsId: 1,
-      licensorIpId: formDataJson.ipId as Address,
-      receiver: formDataJson.receiverAddress as Address,
-      amount: 1,
-      txOptions: { waitForTransaction: true },
-    });
-
-    console.log(
-      `License minted at tx hash ${response.txHash}, License IDs: ${response.licenseTokenIds}`
-    );
-
-    // 2. Mint remixed NFT and register as derivative IPA
-    // TODO: Ask user to input NFT metadata
+    // TODO: Ask user to input remixed NFT metadata
     const derivedNftMetadata = {
       name: "Derived NFT representing ownership of a remixed IP Asset",
       description: "This NFT represents ownership of a remixed IP Asset",
