@@ -10,6 +10,8 @@ export default async function uploadFileToWalrusAction(formData: FormData) {
   const nftMetadataBlobId = formData.get("nftMetadataBlobId") as string;
   const ipMetadataBlobId = formData.get("ipMetadataBlobId") as string;
   const licenseType = formData.get("licenseType") as string;
+  const title = formData.get("title") as string;
+  const description = formData.get("description") as string;
 
   if (!address) {
     return { success: false, error: "No address provided" };
@@ -47,9 +49,11 @@ export default async function uploadFileToWalrusAction(formData: FormData) {
     user_id: address,
     blob_id: blob_id,
     ip_id: ipId,
-    nft_metadata_blob_id: nftMetadataBlobId,
-    ip_metadata_blob_id: ipMetadataBlobId,
+    nft_blob_id: nftMetadataBlobId,
+    ip_blob_id: ipMetadataBlobId,
     license_type: licenseType,
+    title: title,
+    description: description,
   });
 
   if (error) {

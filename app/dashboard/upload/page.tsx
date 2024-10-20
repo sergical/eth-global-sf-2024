@@ -225,6 +225,8 @@ export default function UploadPage() {
     formData.append("address", address);
     formData.append("ipId", ipId);
     formData.append("licenseType", values.licenseType.toString());
+    formData.append("title", values.title);
+    formData.append("description", values.description || "");
 
     const response = await uploadFileToWalrusAction(formData);
     if (!response.success) throw new Error(response.error);
