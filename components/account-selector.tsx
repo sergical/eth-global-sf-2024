@@ -17,10 +17,14 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { SidebarMenuButton } from "@/components/ui/sidebar";
+import { useRouter } from "next/navigation";
+import Link from "next/link";
 
 export function AccountSelector() {
+  const router = useRouter();
   const { address, isConnected } = useAccount();
-  const { setShowAuthFlow } = useDynamicContext();
+
+  const { setShowAuthFlow, handleLogOut } = useDynamicContext();
   if (!isConnected)
     return <Button onClick={() => setShowAuthFlow(true)}>Sign in</Button>;
   return (
@@ -44,13 +48,18 @@ export function AccountSelector() {
         side="top"
         className="w-[--radix-popper-anchor-width]"
       >
-        <DropdownMenuItem>
-          <span>Account</span>
+        <DropdownMenuItem asChild>
+          <Link href="/dashboard/account">
+            <span>Account</span>
+          </Link>
         </DropdownMenuItem>
-        <DropdownMenuItem>
-          <span>Billing</span>
-        </DropdownMenuItem>
-        <DropdownMenuItem>
+
+        <DropdownMenuItem
+          onClick={() => {
+            handleLogOut();
+            router.push("/");
+          }}
+        >
           <span>Sign out</span>
         </DropdownMenuItem>
       </DropdownMenuContent>

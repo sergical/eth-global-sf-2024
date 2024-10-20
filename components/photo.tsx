@@ -10,6 +10,7 @@ import {
   Address,
 } from "@coinbase/onchainkit/identity";
 import { useState, useEffect } from "react";
+import Link from "next/link";
 
 export function Photo({
   blobId,
@@ -58,17 +59,19 @@ export function Photo({
           Image
         </h3>
         {walletAddress ? (
-          <Identity
-            address={walletAddress as `0x${string}`}
-            schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
-            className="w-full p-0 text-white"
-          >
-            <Avatar className="w-6 h-6" />
-            <Name>
-              <Badge />
-            </Name>
-            <Address />
-          </Identity>
+          <Link href={`/user/${walletAddress}`}>
+            <Identity
+              address={walletAddress as `0x${string}`}
+              schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
+              className="w-full p-0 text-white"
+            >
+              <Avatar className="w-6 h-6" />
+              <Name>
+                <Badge />
+              </Name>
+              <Address />
+            </Identity>
+          </Link>
         ) : (
           <p className="text-sm text-white drop-shadow-md">
             Blob ID: {blobId.slice(0, 6)}...{blobId.slice(-4)}

@@ -6,7 +6,9 @@ export const config = createConfig({
   multiInjectedProviderDiscovery: false,
   ssr: true,
   transports: {
-    [mainnet.id]: http(),
+    [mainnet.id]: http(
+      `https://eth-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_API_KEY}`
+    ),
   },
 });
 

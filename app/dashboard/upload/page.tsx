@@ -83,6 +83,7 @@ export default function UploadPage() {
     const formData = new FormData();
     formData.append("file", values.file);
     formData.append("address", address);
+    console.log(`Submitting file to Walrus: ${address}`);
     try {
       const response = await uploadFileToWalrusAction(formData);
       if (response.success) {
