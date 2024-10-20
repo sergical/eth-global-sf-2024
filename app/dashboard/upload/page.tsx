@@ -129,7 +129,9 @@ export default function UploadPage() {
       await uploadFileToWalrus(
         values,
         address as `0x${string}`,
-        ipId as string
+        ipId as string,
+        nftMetadataUrl.split("/").pop() as string,
+        ipMetadataUrl.split("/").pop() as string
       );
 
       toast.success("File uploaded successfully");
@@ -216,7 +218,9 @@ export default function UploadPage() {
   const uploadFileToWalrus = async (
     values: z.infer<typeof formSchema>,
     address: string,
-    ipId: string
+    ipId: string,
+    nftMetadataBlobId: string,
+    ipMetadataBlobId: string
   ) => {
     const formData = new FormData();
     if (values.file) {
@@ -224,6 +228,8 @@ export default function UploadPage() {
     }
     formData.append("address", address);
     formData.append("ipId", ipId);
+    formData.append("nftMetadataBlobId", nftMetadataBlobId);
+    formData.append("ipMetadataBlobId", ipMetadataBlobId);
     formData.append("licenseType", values.licenseType.toString());
     formData.append("title", values.title);
     formData.append("description", values.description || "");
