@@ -7,6 +7,7 @@ import { WagmiProvider } from "wagmi";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { DynamicWagmiConnector } from "@dynamic-labs/wagmi-connector";
 import { config } from "@/lib/wagmi";
+import StoryProviderWrapper from "./storyProviderWrapper";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   const queryClient = new QueryClient();
@@ -26,7 +27,9 @@ export default function Providers({ children }: { children: React.ReactNode }) {
             apiKey={process.env.NEXT_PUBLIC_ONCHAINKIT_API_KEY}
             chain={mainnet}
           >
-            <DynamicWagmiConnector>{children}</DynamicWagmiConnector>
+            <DynamicWagmiConnector>
+              <StoryProviderWrapper>{children}</StoryProviderWrapper>
+            </DynamicWagmiConnector>
           </OnchainKitProvider>
         </QueryClientProvider>
       </WagmiProvider>
