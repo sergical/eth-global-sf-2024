@@ -77,6 +77,10 @@ export function RemixPageContent({
   const onSubmit = async (values: z.infer<typeof formSchema>) => {
     console.log("handle submit");
     console.log(values);
+    setIsLoading(true);
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
     // Implement your submit logic here
   };
 
