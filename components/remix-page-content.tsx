@@ -206,7 +206,7 @@ export function RemixPageContent({
           Original Image
         </h2>
         {originalImageUrl ? (
-          <div className="relative w-full h-fit mx-auto">
+          <div className="relative w-full h-fit mx-auto overflow-hidden">
             <Image
               src={originalImageUrl}
               alt="Original image"
@@ -271,7 +271,7 @@ export function RemixPageContent({
               </p>
               <p>File type: {selectedFile.type}</p>
               {selectedFile.type.startsWith("image/") && (
-                <div className="mt-2 relative w-full h-64">
+                <div className="mt-2 relative w-full h-64 overflow-hidden">
                   <Image
                     src={URL.createObjectURL(selectedFile)}
                     alt="Selected file preview"
