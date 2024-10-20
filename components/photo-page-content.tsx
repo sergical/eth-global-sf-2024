@@ -56,7 +56,7 @@ export function PhotoPageContent({
       case "0":
         return { label: "Non-Commercial Remix", variant: "secondary" as const };
       case "1":
-        return { label: "Commercial Use", variant: "destructive" as const };
+        return { label: "Commercial Use", variant: "default" as const };
       case "2":
         return { label: "Commercial Remix", variant: "default" as const };
       default:
