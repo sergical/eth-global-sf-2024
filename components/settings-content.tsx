@@ -65,7 +65,7 @@ export function SettingsContent() {
                       {...field}
                       disabled={!!ensName}
                     />
-                    <span className="ml-2 absolute right-0 p-2 text-xs bg-muted rounded-md border border-border h-9">
+                    <span className="absolute right-0 -z-10 inline-flex items-center rounded-r-lg border border-input bg-background px-3 text-sm text-muted-foreground h-9">
                       .eth
                     </span>
                   </div>
