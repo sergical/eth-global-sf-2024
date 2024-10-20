@@ -31,9 +31,9 @@ export function AppHeader() {
           <span className="font-bold text-xl">PhotoStock</span>
         </Link>
         <nav className="hidden md:flex space-x-4">
-          {navItems.map((item) => (
+          {navItems.map((item, index) => (
             <Link
-              key={item.href}
+              key={index}
               href={item.href}
               className="text-sm font-medium text-muted-foreground hover:text-primary"
             >
