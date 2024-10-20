@@ -54,27 +54,15 @@ npm install
 ``` 
 3. Run the project locally 
 ``` bash 
-npm start
+npm run dev
 ```
 4. Ensure you have a wallet setup and connect via Dynamic.xyz when prompted.
 5. Upload your images, mint them as NFTs, register them on Story Protocol, and license them through the marketplace!
 
 
+## Setup and Local Dev
+
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
-
-## Getting Started
-
-First, run the development server:
-
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
