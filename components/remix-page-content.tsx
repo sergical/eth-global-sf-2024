@@ -206,12 +206,12 @@ export function RemixPageContent({
           Original Image
         </h2>
         {originalImageUrl ? (
-          <div className="relative w-full h-64">
+          <div className="relative w-full h-fit mx-auto">
             <Image
               src={originalImageUrl}
               alt="Original image"
-              layout="fill"
-              objectFit="contain"
+              width={500}
+              height={500}
             />
           </div>
         ) : (
@@ -275,8 +275,8 @@ export function RemixPageContent({
                   <Image
                     src={URL.createObjectURL(selectedFile)}
                     alt="Selected file preview"
-                    layout="fill"
-                    objectFit="contain"
+                    width={500}
+                    height={500}
                   />
                 </div>
               )}
