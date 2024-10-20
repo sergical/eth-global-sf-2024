@@ -67,7 +67,7 @@ export default function AppProvider({ children }: PropsWithChildren) {
     });
 
     const { request } = await publicClient.simulateContract({
-      address: "0x58b35972f7c5c81cbd174cff6839986f82d0f9f9",
+      address: process.env.NEXT_PUBLIC_NFT_CONTRACT_ADDRESS_721 as Address,
       functionName: "mintNFT",
       args: [to, uri],
       abi: defaultNftContractAbi,
