@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 "use client";
 import getFileFromWalrusAction from "@/server/get-file-from-walrus-action";
 import { motion } from "framer-motion";
@@ -36,12 +37,13 @@ export function Photo({
 
   if (!loaded || !imgUrl) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
-        className="w-full rounded-lg shadow-md transition-all duration-300 group-hover:brightness-75"
-        src="https://v0.dev/placeholder.svg?height=200&width=200"
-        alt="placeholder"
-      />
+      <div className="break-inside-avoid mb-4 relative group">
+        <img
+          className="w-full rounded-lg shadow-md transition-all duration-300 group-hover:brightness-75"
+          src="https://v0.dev/placeholder.svg?height=200&width=200"
+          alt="placeholder"
+        />
+      </div>
     );
   }
 
@@ -71,7 +73,10 @@ export function Photo({
                 schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
                 className="w-full p-0 text-white"
               >
-                <Avatar className="w-6 h-6" />
+                <Avatar
+                  className="w-6 h-6 bg-primary"
+                  address={walletAddress as `0x${string}`}
+                />
                 <Name>
                   <Badge />
                 </Name>

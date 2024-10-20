@@ -28,7 +28,7 @@ export function AppHeader() {
     <header className="border-b">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
         <Link href="/" className="flex items-center">
-          <span className="font-bold text-xl">PhotoStock</span>
+          <span className="font-bold text-xl">PicFable</span>
         </Link>
         <nav className="hidden md:flex space-x-4">
           {navItems.map((item, index) => (

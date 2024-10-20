@@ -73,11 +73,14 @@ export function PhotoPageContent({
                   schemaId="0xf8b05c79f090979bf4a80270aba232dff11a10d9ca55c4f88de95317970f0de9"
                   className="mb-4"
                 >
-                  <Avatar className="w-10 h-10" />
-                  <Name>
+                  <Avatar
+                    className="w-10 h-10 bg-primary"
+                    address={walletAddress as `0x${string}`}
+                  />
+                  <Name address={walletAddress as `0x${string}`}>
                     <Badge />
                   </Name>
-                  <Address />
+                  <Address address={walletAddress as `0x${string}`} />
                 </Identity>
               </Link>
             ) : (
